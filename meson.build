@@ -1,6 +1,6 @@
 project('dpp',
         'cpp',
-        version : '10.0.7',
+        version : '10.00.18',
         default_options : ['warning_level=3', 'cpp_std=c++17'])
 
 # Filesystem support
@@ -10,6 +10,17 @@ pkgconf = import('pkgconfig')
 
 cfg = configuration_data()
 cfg.set('DPP_BUILD', 1)
+
+version_parts = meson.project_version().split('.')
+
+# Admittedly this is incompatible with how versions are *currently* written,
+# but it can be somewhat fixed by including the leading zero in the version itself.
+cfg.set('DPP_VERSION_LONG', '0x00' + ''.join(version_parts))
+cfg.set('DPP_VERSION_SHORT', ''.join(version_parts))
+cfg.set_quoted('DPP_VERSION_TEXT', 'D++ ' + meson.project_version() + ' (31-Aug-2022)')
+cfg.set('DPP_VERSION_MAJOR', version_parts[0])
+cfg.set('DPP_VERSION_MINOR', version_parts[1])
+cfg.set('DPP_VERSION_PATCH', version_parts[2])
 
 # Generated with fd . src/dpp -e cpp -x echo "'{}',"
 src = [
