@@ -19,6 +19,9 @@
  *
  ************************************************************************************/
 #include "test.h"
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 #include <dpp/dpp.h>
 #include <dpp/nlohmann/json.hpp>
 
@@ -158,7 +161,16 @@ int test_summary() {
 
 std::vector<uint8_t> load_test_audio() {
 	std::vector<uint8_t> testaudio;
-	std::ifstream input ("../testdata/Robot.pcm", std::ios::in|std::ios::binary|std::ios::ate);
+
+	#ifdef MESONBUILD
+	// Meson has a different build dir structure, so to make sure this can still
+	// run in the build directory, we gotta change the path a little.
+	auto audio_file = "../testdata/Robot.pcm";
+	#else
+	auto audio_file = "../../testdata/Robot.pcm";
+	#endif
+
+	std::ifstream input (audio_file, std::ios::in|std::ios::binary|std::ios::ate);
 	if (input.is_open()) {
 		size_t testaudio_size = input.tellg();
 		testaudio.resize(testaudio_size);
@@ -167,7 +179,7 @@ std::vector<uint8_t> load_test_audio() {
 		input.close();
 	}
 	else {
-		std::cout << "ERROR: Can't load ../../testdata/Robot.pcm\n";
+		std::cout << "ERROR: Can't load "<< audio_file <<"\n";
 		exit(1);
 	}
 	return testaudio;

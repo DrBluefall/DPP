@@ -18,7 +18,9 @@
  * limitations under the License.
  *
  ************************************************************************************/
+#ifdef HAVE_CONFIG_H
 #include <config.h>
+#endif
 #include <dpp/utility.h>
 #include <dpp/stringops.h>
 #include <dpp/exception.h>

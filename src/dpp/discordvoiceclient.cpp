@@ -19,7 +19,9 @@
  *
  ************************************************************************************/
 
+#ifdef HAVE_CONFIG_H
 #include <config.h>
+#endif
 #include <dpp/export.h>
 #ifdef _WIN32
 	#include <WinSock2.h>

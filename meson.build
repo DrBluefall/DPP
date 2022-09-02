@@ -263,19 +263,31 @@ elif fs.is_dir(meson.project_source_root() / '.git')
 endif
 
 configure_file(output : 'config.h', configuration : cfg)
-cfginc = include_directories('.')
 
 overrides = []
 if need_cpp20
   overrides += 'cpp_std=c++20'
 endif
 
+cpp_args = []
+
+if cpp.get_argument_syntax() == 'msvc'
+  cpp_args += '/DMESONBUILD'
+  cpp_args += '/DHAVE_CONFIG_H'
+else
+  cpp_args += '-DMESONBUILD'
+  cpp_args += '-DHAVE_CONFIG_H'
+endif
+
 dpp_lib = library('dpp',
                   src,
                   dependencies : deps,
-                  include_directories : [ 'include', cfginc ],
+                  include_directories : [ 'include' ],
                   override_options : overrides,
+                  cpp_args : cpp_args,
                  )
+
+install_subdir('include/dpp', install_dir : 'include')
 
 dpp_dep = declare_dependency(
   link_with : dpp_lib,
@@ -291,5 +303,8 @@ if get_option('dpp_build_test')
   dpp_test = executable('unittest',
                         ['src/unittest.cpp', 'src/test.cpp'],
                         include_directories : 'src',
-                        dependencies : dpp_dep)
+                        dependencies : dpp_dep,
+                        override_options : overrides,
+                        cpp_args : cpp_args,
+                       )
 endif
