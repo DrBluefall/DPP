@@ -225,7 +225,9 @@ if get_option('dpp_coro')
 endif
 
 deps = [
-  dependency('nlohmann_json'),
+  # DPP has its own version of nlohmann::json under dpp/nlohmann/json.hpp.
+  # I'm still keeping this here for completeness's sake, though.
+  # dependency('nlohmann_json'),
   dependency('openssl'),
   dependency('zlib'),
   dependency('threads'),

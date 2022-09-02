@@ -16,3 +16,5 @@ tags
 .cache
 src/dpp/dpp.rc
 /main
+/subprojects/*
+!/subprojects/*.wrap
